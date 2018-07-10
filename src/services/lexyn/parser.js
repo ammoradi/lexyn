@@ -126,7 +126,12 @@ function parseInput(lrTable, inputStr, maximumStepCount) {
 
     // console.log(table.toString())
 
-    return [...['step', 'STACK', 'INPUT', 'ACTION'],rows]
+    // return [...['step', 'STACK', 'INPUT', 'ACTION'],rows]
+    return {
+        header: ['step', 'STACK', 'INPUT', 'ACTION'],
+        rows,
+        accepted: tableStr.search('acc') !== -1
+    }
 }
 
 function formatStack(stack) {
@@ -198,7 +203,11 @@ function formatLrTable(lr) {
 
     console.log(table.toString())
 
-    return [...terms, rows]
+    // return [...terms, rows]
+    return {
+        header: terms,
+        rows
+    }
 }
 
 function formatAction(state, token, forceSingleAction) {
@@ -266,7 +275,7 @@ function handleParsing(data, method, input) {
     }
 
     if (input) {
-        outPut['pars-table'] = renderParsingSteps(lr, input)
+        outPut['parse-table'] = renderParsingSteps(lr, input)
     }
 
     return outPut

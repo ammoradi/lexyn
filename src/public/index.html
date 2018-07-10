@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <link href="css/normalize.css" rel="stylesheet" type="text/css" />
+<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 <link href="css/index.css" rel="stylesheet" type="text/css" />
 <script src="lib/jquery.min.js" type="text/javascript"></script>
 <script src="controllers/index.js" type="text/javascript"></script>
@@ -9,6 +10,57 @@
     <title>Title</title>
 </head>
 <body>
+<div class="wrapper"></div>
+<br>
+<div class="container">
+    <div class="row justify-content-md-center">
+        <img src="assets/iust.png">
+    </div>
+</div>
+<br>
+<div class="container">
+    <div class="row justify-content-md-center">
+        <form class="col col-lg-8 col-md-12">
+            <div class="form-group" id="myForm" onsubmit="handleSubmit()">
+                <label>select parsing type:</label>
+                <select id="typeSelect" class="form-control">
+                    <option value="lr1">lr1</option>
+                    <option value="lalr1">lalr1</option>
+                    <option value="slr1">slr1</option>
+                    <option value="ll1">ll1</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>type grammar:</label>
+                <textarea class="form-control" id="grammar"></textarea>
+            </div>
+            <div class="form-group">
+                <label>type sample input:</label>
+                <input class="form-control" id="testInput" type="text">
+            </div>
+            <button type="button" class="btn btn-primary" id="submitButton" onclick="handleSubmit()">Submit</button>
+        </form>
+    </div>
+</div>
+<br>
+
+<div class="container">
+    <div class="row justify-content-md-center">
+        <table class="table table-bordered col col-lg-8 col-md-12" id="parseTable"></table>
+    </div>
+</div>
+    <br>
+<div class="container">
+    <div class="row justify-content-md-center">
+        <div class="alert col col-lg-6 col-md-12" id="result"></div>
+    </div>
+</div>
+<br>
+<div class="container">
+    <div class="row justify-content-md-center">
+        <table class="table table-bordered col col-lg-8 col-md-12" id="TheFParse"></table>
+    </div>
+</div>
 
 </body>
 </html>

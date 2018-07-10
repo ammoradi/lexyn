@@ -1,0 +1,69 @@
+body{
+    background-color: #f2f2f2;
+    /*background-image: url("../assets/code.jpg");*/
+    /*background-repeat: repeat;*/
+    /*background-clip: border-box;*/
+    /*background-size: 200px;*/
+}
+.wrapper{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    background-image: url("../assets/code.jpg");
+    opacity: 0.1;
+}
+.table-bordered td, .table-bordered th {
+    border: 1px solid #212529;
+    background: white;
+}
+.alert{
+    text-align: center;
+}
+.form-control{
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+label {
+    margin-bottom: .6rem;
+    font-weight: bold;
+}
+textarea{
+    min-height: 170px;
+}
+.btn{
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+form{
+    background: white;
+    padding: 20px;
+    box-shadow: 0 0 10px 0 rgba(0,0,0,0.1)
+}
+table{
+    box-shadow: 0 0 10px 0 rgba(0,0,0,0.1)
+}
+.success-table td {
+    background-color: #d4edda;
+}
+
+.error-table td {
+    background-color: #f8d7da;
+}
+
+img{
+    width: 85px;
+    height: 85px;
+}
+
+.bold {
+    font-weight: bold;
+}
+.acc-bold{
+    font-weight: bold;
+    color: #155724;
+}

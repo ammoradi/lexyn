@@ -460,7 +460,12 @@ function parseInput(inputStr, maximumStepCount = 100) {
     	console.log('string not accepted!'.red)
     }
 
-	return [...['STACK', 'INPUT', 'RULE'],parsingRows]
+	// return [...['STACK', 'INPUT', 'RULE'],parsingRows]
+	return {
+		header: ['STACK', 'INPUT', 'RULE'],
+		rows: parsingRows,
+		accepted: ok
+	}
 }
 
 function toString(tree) {
@@ -508,7 +513,11 @@ function renderRuleTable() {
 	console.log(table.toString())
 
 	// return table.toString()
-	return [...head,rows]
+	// return [...head,rows]
+	return {
+		header: head,
+		rows
+	}
 }
 
 

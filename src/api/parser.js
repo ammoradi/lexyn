@@ -22,5 +22,12 @@ export default ({ config, db }) => resource({
 			fetched = 'query is wrong'
             res.error(fetched)
         }
-	}
+	},
+
+    /** POST / - Create a new entity */
+    create(req, res) {
+        let method = req.body.method ? req.body.method : null
+        let input = req.body.input ? req.body.input : null
+        res.send(JSON.stringify({data: handleParsing(req.body.grammar, method, input || null)}))
+    },
 });
