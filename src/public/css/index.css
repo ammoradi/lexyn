@@ -1,3 +1,10 @@
+*{
+    font-family: 'Roboto', sans-serif;
+}
+
+form textarea::placeholder, input::placeholder{
+    font-family: 'Josefin Slab', serif;
+}
 body{
     background-color: #f2f2f2;
     /*background-image: url("../assets/code.jpg");*/
@@ -67,3 +74,28 @@ img{
     font-weight: bold;
     color: #155724;
 }
+
+@font-face {
+    font-family: 'Josefin Slab';
+    font-weight: 400;
+    src: url('./../assets/fonts/JosefinSlab-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Josefin Slab';
+    font-weight: 700;
+    src: url('./../assets/fonts/JosefinSlab-Bold.ttf');
+}
+
+@font-face {
+    font-family: 'Roboto';
+    font-weight: 400;
+    src: url('./../assets/fonts/Roboto-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Roboto';
+    font-weight: 700;
+    src: url('./../assets/fonts/Roboto-Bold.ttf');
+}
+
