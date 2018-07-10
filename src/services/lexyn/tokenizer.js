@@ -1,7 +1,8 @@
-const execFile = require('child_process').execFile;
+const execFile = require('child_process').execFile
 
 function tokenize(src, dst) {
-    const child = execFile('python3', ['src/python_lexer.py', src, dst], (error, stdout, stderr) => {
+    let finalDest = ''
+    const child = execFile('python3', ['src/services/lexyn/python_lexer.py', src, dst], (error, stdout, stderr) => {
         if (error) {
             console.error('stderr', stderr)
             process.exit(0)
@@ -9,12 +10,11 @@ function tokenize(src, dst) {
         if (stdout.lenght > 0)
             console.log(stdout)
 
-        console.log(`tokens are saved into ${dst}`)
+        finalDest = dst
     })
+    return dst
 }
 
 module.exports = {
     tokenize: tokenize
 }
-
-export default tokenize

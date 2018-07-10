@@ -372,7 +372,7 @@ function formatRule(rule) {
 	return rule;
 }
 
-function parseInput(inputStr, maximumStepCount) {
+function parseInput(inputStr, maximumStepCount = 100) {
 	inputStr = inputStr.trim().replace(/ /g, '')
 	// var input = $('input').value.trim().split(' ');
 	var input = inputStr.split('');
@@ -452,7 +452,15 @@ function parseInput(inputStr, maximumStepCount) {
 
 	table.push(...parsingRows)
 
-	return [table.toString(), ok]
+    if (ok) {
+    	console.log('Parsing Steps'.cyan)
+    	console.log(table.toString())
+    	console.log('string accepted!'.green)
+    } else {
+    	console.log('string not accepted!'.red)
+    }
+
+	return [...['STACK', 'INPUT', 'RULE'],parsingRows]
 }
 
 function toString(tree) {
@@ -496,27 +504,39 @@ function renderRuleTable() {
 
 	table.push(...rows)
 
-	return table.toString()
+	console.log('LL(1) Parsing Table:'.cyan)
+	console.log(table.toString())
+
+	// return table.toString()
+	return [...head,rows]
 }
 
 
 function handleLl1(grammerTxt, input) {
 	createLl1Table(grammerTxt)
-	console.log(('\nLL(1) Parse Table:').cyan)
-	console.log(renderRuleTable())
+	// console.log(('\nLL(1) Parse Table:').cyan)
+	// console.log(renderRuleTable())
+	let tableRes = renderRuleTable()
+
+	let str = ''
 
 	if (input) {
-		const [str, ok] = parseInput(input, 100)
-		if (ok) {
-			console.log('\nParsing Steps'.cyan)
-			console.log(str)
-			console.log('string accepted!'.green)
-		} else {
-			console.log('\nstring not accepted!'.red)
-		}
+		str = parseInput(input)
+		// if (ok) {
+		// 	console.log('\nParsing Steps'.cyan)
+		// 	console.log(str)
+		// 	console.log('string accepted!'.green)
+		// } else {
+		// 	console.log('\nstring not accepted!'.red)
+		// }
 	}
+
+	// console.log(tableRes)
+
+	return {states:tableRes, 'parse-table': str}
 }
 
 module.exports = {
-	handleLl1: handleLl1
+	handleLl1: handleLl1,
+	renderRuleTable: renderRuleTable
 }

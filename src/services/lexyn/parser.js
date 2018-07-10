@@ -22,7 +22,7 @@
  *  THE SOFTWARE.
  */
 
-fs = require('fs')
+import fs from 'fs'
 
 const grammer = require('./grammer')
 const LRClosureTable = require('./lrclosuretable').LRClosureTable
@@ -76,7 +76,7 @@ function parseInput(lrTable, inputStr, maximumStepCount) {
     var actionElement = chooseActionElement(state, token);
 
     var rows = [
-        [(1 + '').gray, formatStack(stack), formatInput(tokens, tokenIndex), formatAction(state, token, true)]
+        [(1 + ''), formatStack(stack), formatInput(tokens, tokenIndex), formatAction(state, token, true)]
     ]
     var i = 2;
 
@@ -105,7 +105,7 @@ function parseInput(lrTable, inputStr, maximumStepCount) {
         action = state[token];
         actionElement = chooseActionElement(state, token);
 
-        rows.push([(i + '').gray, formatStack(stack), formatInput(tokens, tokenIndex), formatAction(state, token, true)]);
+        rows.push([(i + ''), formatStack(stack), formatInput(tokens, tokenIndex), formatAction(state, token, true)]);
         ++i;
     }
 
@@ -114,21 +114,33 @@ function parseInput(lrTable, inputStr, maximumStepCount) {
     });
     table.push(...rows)
 
-    return table.toString();
+    let tableStr = table.toString()
+
+    if (tableStr.search('acc') === -1)
+        console.log('string not accepted!'.red)
+    else {
+        console.log('Parsing Steps:'.cyan)
+        console.log(tableStr)
+        console.log('string accepted!'.green)
+    }
+
+    // console.log(table.toString())
+
+    return [...['step', 'STACK', 'INPUT', 'ACTION'],rows]
 }
 
 function formatStack(stack) {
     var result = stack.slice(0);
 
     for (var i = 0; i < result.length; i += 2) {
-        result[i] = (result[i] + '').blue;
+        result[i] = (result[i] + '');
     }
 
     return result.join(' ');
 }
 
 function formatInput(tokens, tokenIndex) {
-    return tokens.slice(tokenIndex).join(' ').yellow
+    return tokens.slice(tokenIndex).join(' ')
 }
 
 
@@ -136,8 +148,8 @@ function cleanGrammerText(grammer) {
     try {
         var lines = grammer.split('\n')
         var result = ''
-        let rules = []
-        for (let line of lines) {
+        var rules = []
+        for (var line of lines) {
             var parts = line.split('->')
             if (parts.length !== 2)
                 continue
@@ -163,15 +175,15 @@ function formatLrTable(lr) {
     const terms = g.terminals.concat(['$'].concat(g.nonterminals))
 
     const tableHead = ['#']
-    for (let t of terms)
+    for (var t of terms)
         tableHead.push(t)
 
 
-    let rows = []
-    for (let state of lr.states) {
-        let row = [state.index]
+    var rows = []
+    for (var state of lr.states) {
+        var row = [state.index]
 
-        for (let t of terms) {
+        for (var t of terms) {
             row.push(formatAction(state, t))
         }
 
@@ -184,27 +196,29 @@ function formatLrTable(lr) {
 
     table.push(...rows)
 
-    return table.toString()
+    console.log(table.toString())
+
+    return [...terms, rows]
 }
 
 function formatAction(state, token, forceSingleAction) {
-    let action = state[token]
+    var action = state[token]
     if (action === undefined)
         return ''
 
     if (forceSingleAction === undefined)
         forceSingleAction = false
 
-    let result = ''
+    var result = ''
     if (action.length > 1 && !forceSingleAction) {
-        actions = []
-        for (let a of action)
+        let actions = []
+        for (var a of action)
             actions.push(a.toString())
-        result = actions.join('/').yellow
+        result = actions.join('/')
     } else {
         result = action[0].toString()
         if (result === 'r0')
-            result = 'acc'.green
+            result = 'acc'
 
         if (forceSingleAction && action[0].actionType === '')
             result = 'goto ' + result
@@ -214,22 +228,11 @@ function formatAction(state, token, forceSingleAction) {
 }
 
 function renderParsingSteps(lr, input) {
-    console.log()
-    parseTable = parseInput(lr, input, 100)
-    if (parseTable.search('acc') === -1)
-        console.log('string not accepted!'.red)
-    else {
-        console.log('Parsing Steps'.cyan)
-        console.log(parseTable)
-        console.log('string accepted!'.green)
-    }
+    return parseInput(lr, input, 100)
 }
 
 function handleParsing(data, method, input) {
     var txt = cleanGrammerText(data)
-
-    console.log('Grammer:'.yellow)
-    console.log(txt.yellow)
 
     if (method === 'lr1')
         var Item = require('./lr1item')
@@ -238,21 +241,35 @@ function handleParsing(data, method, input) {
     else if (method === 'lalr1')
         var Item = require('./lalr1item')
     else if (method === 'll1') {
-        LL1.handleLl1(txt, input)
+        // LL1.handleLl1(txt, input)
+        let ll1Res = LL1.handleLl1(txt, input)
+        return {
+            'grammar': txt,
+            'states': ll1Res.states,
+            'parse-table': ll1Res['parse-table']
+        }
         process.exit(0)
     } else
         process.exit(0)
 
-    let g = new grammer.Grammar(txt)
-    let lrClosureTable = new LRClosureTable(g, Item);
-    let lr = new LRTable(lrClosureTable);
+    var g = new grammer.Grammar(txt)
+    var lrClosureTable = new LRClosureTable(g, Item);
+    var lr = new LRTable(lrClosureTable);
 
     console.log('')
     console.log((Item.prototype.grammarType + ' Parse Table:').cyan)
-    console.log(formatLrTable(lr))
+    // console.log(formatLrTable(lr))
 
-    if (input !== undefined)
-        renderParsingSteps(lr, input)
+    var outPut = {
+        'grammar': txt,
+        'states': formatLrTable(lr)
+    }
+
+    if (input) {
+        outPut['pars-table'] = renderParsingSteps(lr, input)
+    }
+
+    return outPut
 
 }
 
@@ -262,12 +279,11 @@ function parse(src, method, input) {
             return console.log(err);
         }
 
-        handleParsing(data, method, input)
+        return handleParsing(data, method, input)
     });
 }
 
 module.exports = {
-    parse: parse
+    parse: parse,
+    handleParsing: handleParsing
 }
-
-export default parse
